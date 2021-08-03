@@ -3,6 +3,7 @@ import {Request, Response} from 'express';
 import {User} from '../entity/User';
 import * as jwt from 'jsonwebtoken';
 import config from '../config/config';
+import { validate } from "class-validator";
 
 class AuthController{
     static login = async (req: Request, res: Response)=>{
@@ -46,7 +47,18 @@ class AuthController{
         if (!user.checkPassword(oldPassword)){
             return res.status(401).json({message: 'Check your old password'})
         }
+        user.password = newPassword
+        const validationOps={validationError:{target:false, value:false}};
+        const errors = await validate(user, validationOps);
+        if (errors.length>0){
+            return res.status(400).json(errors);
 
+        }
+            ///Hash password
+            user.hashPasword();
+            userRepository.save(user);
+            res.json({message: ' Password change!!'})
+        
     };
 
 }

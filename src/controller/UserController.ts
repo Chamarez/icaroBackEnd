@@ -6,7 +6,12 @@ import { validate } from "class-validator";
 export class UserController {
     static getAll = async (req:Request, res:Response)=> {
         const userRepository = getRepository(User);
-        const users = await userRepository.find();
+        try{        
+            users = await userRepository.find();
+        }
+        catch(e){
+            res.status(400).json({menssage: 'Something goes wrong'})
+        }
         
         if(users.length>0){
             res.send(users);
