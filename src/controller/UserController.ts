@@ -34,13 +34,16 @@ export class UserController {
     };
 
     static newUser = async (req:Request, res:Response) => {
-        const {username, password, role} = req.body;
+        const {username, password, role, country, city} = req.body;
 
         const user = new User();
 
         user.username = username;
         user.password = password;
         user.role = role;
+        user.country = country;
+        user.city = city;
+        
 
         //validate
         const validationOpt = {validationError:{target:false, value:false}}

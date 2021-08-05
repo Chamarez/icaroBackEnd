@@ -33,6 +33,15 @@ export class User {
     @UpdateDateColumn()
     updateAt: Date;
 
+    @Column()
+    @IsNotEmpty()
+    country: string;
+
+    @Column()
+    @IsNotEmpty()
+    city: string;
+
+
     hashPasword():void{
         const salt = bcrypt.genSaltSync(10);
         this.password = bcrypt.hashSync(this.password, salt);
