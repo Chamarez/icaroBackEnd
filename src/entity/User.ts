@@ -27,12 +27,10 @@ export class User {
 
     @Column()
     @CreateDateColumn()
-    @IsNotEmpty()
     createdAt: Date;
 
     @Column()
     @UpdateDateColumn()
-    @IsNotEmpty()
     updateAt: Date;
 
     hashPasword():void{

@@ -1,27 +1,25 @@
 import {Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import { MinLength, IsNotEmpty, IsEmail, MaxLength } from "class-validator";
 import * as bcrypt from 'bcryptjs';
-//TO DO ISEMAIL
+
 
 @Entity()
 export class Msj {
 
     @PrimaryGeneratedColumn()
-    MsjId: number;
+    msjId: number;
 
-    
     @Column()
-    @MinLength(6)
+    @IsNotEmpty()
+    sender: string;
+
+    @Column()
+    @IsNotEmpty()
+    addressee: string;
+        
+    @Column()
     @MaxLength(144)
     @IsNotEmpty()
-    msj: string
-
-    @Column()
-    @IsNotEmpty()
-    sender: string
-
-    @Column()
-    @IsNotEmpty()
-    addressee: string
+    msjs: string;
     
 }
