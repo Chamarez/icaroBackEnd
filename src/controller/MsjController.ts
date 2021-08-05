@@ -37,7 +37,30 @@ export class MsjController {
         // All ok
         res.send('Msj sended!')
     };
-
+    static getBySender = async (req: Request, res:Response)=>{
+        const {sender} = req.params
+   
+        
+        const msjRepository = getRepository(Msj);
+        try{
+            const msj = await msjRepository.query(`SELECT msjs FROM msj WHERE sender=${sender}`);
+            res.send(msj);
+        }
+        catch(e){
+            res.status(404).json({message: 'No result'});
+        }
+    };
+    static     getByaddressee = async (req: Request, res:Response)=>{
+        const {addressee} = req.params;
+        const msjRepository = getRepository(Msj);
+        try{
+            const msj = await msjRepository.query(`SELECT msjs FROM msj WHERE addressee=${addressee}`);
+            res.send(msj)
+        }
+        catch(e){
+            res.status(404).json({message: 'No result'});
+        }
+    };
 
 }
 
