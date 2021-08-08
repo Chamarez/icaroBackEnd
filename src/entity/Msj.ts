@@ -21,5 +21,11 @@ export class Msj {
     @MaxLength(144)
     @IsNotEmpty()
     msjs: string;
+
+    @Column()
+    @IsNotEmpty()
+    date: string;
+
+
     
 }
