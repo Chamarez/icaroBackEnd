@@ -26,6 +26,11 @@ export class Msj {
     @IsNotEmpty()
     date: string;
 
+    @Column()
+    @IsNotEmpty()
+    readerreceived: number;
 
-    
+    @Column()
+    @IsNotEmpty()
+    readersender: number;
 }

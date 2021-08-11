@@ -1,4 +1,4 @@
-import {createQueryBuilder, getConnection, getRepository, SelectQueryBuilder} from "typeorm";
+import {createQueryBuilder, getConnection, getRepository, In, SelectQueryBuilder} from "typeorm";
 import {Request, Response, NextFunction} from "express";
 import {User} from "../entity/User";
 import { arrayContains, validate } from "class-validator";
@@ -15,7 +15,9 @@ export class MsjController {
         msj.sender = sender;
         msj.addressee = addressee;
         msj.msjs = msjs;
-        msj.date = Date();  
+        msj.date = Date();
+        msj.readerreceived = 1; 
+        msj.readersender = 1;  
         
 
 
@@ -46,7 +48,7 @@ export class MsjController {
         
         const msjRepository = getRepository(Msj);
         try{
-            let msj = await msjRepository.query(`SELECT addressee, msjs, date FROM msj WHERE sender=${sender}`);
+            let msj = await msjRepository.query(`SELECT addressee, msjs, date, msjId  FROM msj WHERE sender=${sender} AND readersender = 1`);
             res.send(msj);
 
 
@@ -59,15 +61,43 @@ export class MsjController {
         const {addressee} = req.params;
         const msjRepository = getRepository(Msj);
         try{
-            const msj = await msjRepository.query(`SELECT sender, msjs, date FROM msj WHERE addressee=${addressee}`);
+            const msj = await msjRepository.query(`SELECT sender, msjs, date, msjId FROM msj WHERE addressee=${addressee} AND readerreceived = 1`);
+
             res.send(msj)
         }
         catch(e){
             res.status(404).json({message: 'No result'});
         }
     };
+   ///delette mensagges
+   static deleteMessaggeSended = async (req: Request, res: Response) =>{
+   const {msjId} = req.params;
+ 
+     const msjRepository =  getRepository(Msj)
+     
+     try{
+        const msj = await msjRepository.query(`UPDATE msj SET readersender = 0 WHERE msjId =${msjId}`);
+        
+    }   catch(e){
+        res.status(404).json({message: 'No result'});
+    }
+    res.status(201).json({message:'Message deleted'});
 
+};
+static deleteMessaggeReceived = async (req: Request, res: Response) =>{
+    const {msjId} = req.params;
+  
+      const msjRepository =  getRepository(Msj)
+      
+      try{
+          const msj = await msjRepository.query(`UPDATE msj SET readerreceived = 0 WHERE msjId =${msjId}`);
+
+         
+     }   catch(e){
+         res.status(404).json({message: 'No result'});
+     }
+     res.status(201).json({message:'Message deleted'});
+
+ };
 }
-
-
 export default UserController;
