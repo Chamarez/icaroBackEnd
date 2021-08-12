@@ -61,8 +61,7 @@ export class MsjController {
         const {addressee} = req.params;
         const msjRepository = getRepository(Msj);
         try{
-            const msj = await msjRepository.query(`SELECT sender, msjs, date, msjId FROM msj WHERE addressee=${addressee} AND readerreceived = 1`);
-
+            let msj = await msjRepository.query(`SELECT sender, msjs, date, msjId FROM msj WHERE addressee=${addressee} AND readerreceived = 1`);
             res.send(msj)
         }
         catch(e){
